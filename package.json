@@ -1,0 +1,39 @@
+{
+    "name": "koa-path-mapping",
+    "version": "0.0.0",
+    "author": "ZSkycat",
+    "description": "TODO",
+    "license": "MIT",
+    "keywords": [
+        "koa",
+        "middleware",
+        "redirect",
+        "rewrite",
+        "error"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/ZSkycat/koa-path-mapping"
+    },
+    "main": "./dist/index.js",
+    "files": [
+        "dist/",
+        "src/"
+    ],
+    "scripts": {
+        "build": "npm run clear && tsc -p .",
+        "clear": "rimraf ./dist/**/*"
+    },
+    "dependencies": {
+        "koa-compose": "^4.1.0"
+    },
+    "devDependencies": {
+        "@types/koa": "^2.0.46",
+        "@types/koa-compose": "^3.2.2",
+        "@types/node": "^10.5.8",
+        "koa": "^2.5.2",
+        "rimraf": "^2.6.2",
+        "tsc": "^1.20150623.0",
+        "typescript": "^3.0.1"
+    }
+}
