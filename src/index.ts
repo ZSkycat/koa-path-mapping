@@ -6,7 +6,7 @@ const ID_KEY = '__PathMapping';
 export function pathMappingMiddleware(input: PathMappingOptionsInput): Middleware {
     let options = resolveOptions(input);
     let result: Middleware = async function(context, next) {
-        if (options.ignoreJson && context.header.accept && (<string>context.header.accept).indexOf('application/json') === -1) {
+        if (options.ignoreJson && context.header.accept && (<string>context.header.accept).indexOf('application/json') !== -1) {
             await next();
             return;
         }
