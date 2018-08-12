@@ -29,8 +29,8 @@ export function pathMappingMiddleware(input: PathMappingOptionsInput): Middlewar
         await next();
 
         for (let item of options.error) {
-            if ((item.status && item.status === context.status) || (item.status == undefined && context.status >= 400)) {
-                if (item.from && resolveRegExp(item.from).test(context.path)) {
+            if ((item.status == undefined && context.status >= 400) || (item.status && item.status === context.status)) {
+                if (item.from == undefined || (item.from && resolveRegExp(item.from).test(context.path))) {
                     switch (item.action) {
                         case 'redirect':
                             context.redirect(item.to);
