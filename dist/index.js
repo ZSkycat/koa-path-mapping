@@ -5,7 +5,7 @@ const ID_KEY = '__PathMapping';
 function pathMappingMiddleware(input) {
     let options = resolveOptions(input);
     let result = async function (context, next) {
-        if (options.ignoreJson && context.header.accept && context.header.accept.indexOf('application/json') === -1) {
+        if (options.ignoreJson && context.header.accept && context.header.accept.indexOf('application/json') !== -1) {
             await next();
             return;
         }
@@ -14,9 +14,13 @@ function pathMappingMiddleware(input) {
                 switch (item.action) {
                     case 'redirect':
                         context.redirect(item.to);
+                        if (options.enableLog)
+                            options.logger(`[PM] redirect ${context.path} to ${item.to}`);
                         return;
                     case 'rewrite':
                         context.path = item.to;
+                        if (options.enableLog)
+                            options.logger(`[PM] rewrite ${context.path} to ${item.to}`);
                         break loopM;
                 }
             }
@@ -24,17 +28,23 @@ function pathMappingMiddleware(input) {
         await next();
         for (let item of options.error) {
             if ((item.status && item.status === context.status) || (item.status == undefined && context.status >= 400)) {
-                switch (item.action) {
-                    case 'redirect':
-                        context.redirect(item.to);
-                        return;
-                    case 'rewrite':
-                        let index = context.app.middleware.findIndex(x => x[ID_KEY] === true);
-                        let afterMiddleware = context.app.middleware.slice(index + 1);
-                        let fnMiddleware = compose(afterMiddleware);
-                        context.path = item.to;
-                        await fnMiddleware(context);
-                        return;
+                if (item.from && resolveRegExp(item.from).test(context.path)) {
+                    switch (item.action) {
+                        case 'redirect':
+                            context.redirect(item.to);
+                            if (options.enableLog)
+                                options.logger(`[PM] error-redirect ${context.path} to ${item.to}`);
+                            return;
+                        case 'rewrite':
+                            let index = context.app.middleware.findIndex(x => x[ID_KEY] === true);
+                            let afterMiddleware = context.app.middleware.slice(index + 1);
+                            let fnMiddleware = compose(afterMiddleware);
+                            context.path = item.to;
+                            if (options.enableLog)
+                                options.logger(`[PM] error-rewrite ${context.path} to ${item.to}`);
+                            await fnMiddleware(context);
+                            return;
+                    }
                 }
             }
         }
@@ -43,7 +53,6 @@ function pathMappingMiddleware(input) {
     return result;
 }
 exports.pathMappingMiddleware = pathMappingMiddleware;
-// #region help
 function resolveOptions(options) {
     let defaultOptions = {
         mapping: [],
