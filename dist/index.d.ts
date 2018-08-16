@@ -1,19 +1,19 @@
 import { Middleware } from 'koa';
 export declare function pathMappingMiddleware(input: PathMappingOptionsInput): Middleware;
-export interface MappingOption {
+export interface MappingOptions {
     action: 'redirect' | 'rewrite';
     from: RegExp | string;
     to: string;
 }
-export interface ErrorOption {
+export interface ErrorOptions {
     action: 'redirect' | 'rewrite';
     status?: number;
     from?: RegExp | string;
     to: string;
 }
 export interface PathMappingOptions {
-    mapping: MappingOption[];
-    error: ErrorOption[];
+    mapping: MappingOptions[];
+    error: ErrorOptions[];
     ignoreJson: boolean;
     enableLog: boolean;
     logger: Function;
