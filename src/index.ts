@@ -70,13 +70,13 @@ function resolveRegExp(regexp: string | RegExp) {
 }
 
 // #region type
-export interface MappingOption {
+export interface MappingOptions {
     action: 'redirect' | 'rewrite';
     from: RegExp | string;
     to: string;
 }
 
-export interface ErrorOption {
+export interface ErrorOptions {
     action: 'redirect' | 'rewrite';
     status?: number;
     from?: RegExp | string;
@@ -84,8 +84,8 @@ export interface ErrorOption {
 }
 
 export interface PathMappingOptions {
-    mapping: MappingOption[];
-    error: ErrorOption[];
+    mapping: MappingOptions[];
+    error: ErrorOptions[];
     ignoreJson: boolean;
     enableLog: boolean;
     logger: Function;
