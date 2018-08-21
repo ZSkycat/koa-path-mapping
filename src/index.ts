@@ -16,11 +16,11 @@ export function pathMappingMiddleware(input: PathMappingOptionsInput): Middlewar
                 switch (item.action) {
                     case 'redirect':
                         context.redirect(item.to);
-                        if (options.enableLog) options.logger(`[PM] redirect ${context.path} to ${item.to}`);
+                        if (options.enableLog) options.logger(`[KPM] redirect ${context.path} to ${item.to}`);
                         return;
                     case 'rewrite':
                         context.path = item.to;
-                        if (options.enableLog) options.logger(`[PM] rewrite ${context.path} to ${item.to}`);
+                        if (options.enableLog) options.logger(`[KPM] rewrite ${context.path} to ${item.to}`);
                         break loopM;
                 }
             }
@@ -34,14 +34,14 @@ export function pathMappingMiddleware(input: PathMappingOptionsInput): Middlewar
                     switch (item.action) {
                         case 'redirect':
                             context.redirect(item.to);
-                            if (options.enableLog) options.logger(`[PM] error-redirect ${context.path} to ${item.to}`);
+                            if (options.enableLog) options.logger(`[KPM] error-redirect ${context.path} to ${item.to}`);
                             return;
                         case 'rewrite':
                             let index = context.app.middleware.findIndex(x => (<any>x)[ID_KEY] === true);
                             let afterMiddleware = context.app.middleware.slice(index + 1);
                             let fnMiddleware = compose(afterMiddleware);
                             context.path = item.to;
-                            if (options.enableLog) options.logger(`[PM] error-rewrite ${context.path} to ${item.to}`);
+                            if (options.enableLog) options.logger(`[KPM] error-rewrite ${context.path} to ${item.to}`);
                             await fnMiddleware(context);
                             return;
                     }
