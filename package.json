@@ -2,7 +2,7 @@
     "name": "koa-path-mapping",
     "version": "0.0.4",
     "author": "ZSkycat",
-    "description": "TODO",
+    "description": "Koa middleware for redirect or path rewrite of requests. Support path rewrite of failed requests.",
     "license": "MIT",
     "keywords": [
         "koa",
